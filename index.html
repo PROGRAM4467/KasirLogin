@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Kasir AJAIWEB</title>
+<style>
+  :root{
+    --bg:#f5f5f5;
+    --card:#ffffff;
+    --text:#1f2937;
+    --muted:#6b7280;
+    --primary:#2563eb;
+    --primary-text:#ffffff;
+    --accent:#10b981;
+    --danger:#ef4444;
+    --warning:#f59e0b;
+    --shadow:0 2px 6px rgba(0,0,0,.1);
+    --radius:12px;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,Ubuntu; background:var(--bg); color:var(--text)}
+  h1,h2,h3{margin:0 0 .5rem}
+  .wrap{max-width:1200px;margin:24px auto;padding:0 16px}
+  .card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:16px}
+  .grid{display:grid;gap:16px}
+  .grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .row{display:flex;gap:10px;flex-wrap:wrap}
+  label{font-size:.9rem;color:var(--muted)}
+  input,select,button{width:100%;padding:10px;border:1px solid #e5e7eb;border-radius:10px;background:#fff;font:inherit}
+  input[type="color"]{padding:0;height:42px}
+  button{background:var(--primary);color:var(--primary-text);border:none;cursor:pointer;transition:.2s}
+  button:hover{filter:brightness(.95)}
+  .btn-secondary{background:#e5e7eb;color:#111827}
+  .btn-accent{background:var(--accent)}
+  .btn-danger{background:var(--danger)}
+  .btn-warning{background:var(--warning)}
+  .btn-small{padding:6px 10px;font-size:.85rem}
+  .status{font-size:.9rem;margin-top:6px;min-height:1.2em;color:var(--accent)}
+  .status.error{color:var(--danger)}
+  table{width:100%;border-collapse:collapse}
+  th,td{border:1px solid #e5e7eb;padding:8px;text-align:center}
+  th{background:#f3f4f6}
+  .header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+  .badge{padding:4px 10px;border-radius:999px;font-size:.8rem;background:#eef2ff;color:#3730a3}
+  .hidden{display:none !important}
+  .title{display:flex;gap:8px;align-items:center}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <!-- ============ LOGIN ============ -->
+  <div id="loginView" class="grid">
+    <div class="card" style="max-width:720px;margin:0 auto;">
+      <h1 class="title">🔐 Masuk Kasir</h1>
+      <p style="color:var(--muted);margin:.25rem 0 1rem">Isi nama toko dan pilih tema sebelum menggunakan kasir.</p>
+      <div class="grid grid-2">
+        <div>
+          <label for="namaToko">Nama Toko</label>
+          <input id="namaToko" type="text" placeholder="Contoh: AJAIWEB Mart"/>
+        </div>
+        <div>
+          <label>Tema</label>
+          <div class="row">
+            <label style="display:flex;gap:8px;align-items:center">
+              <input type="radio" name="tema" value="default" id="temaDefault" checked/> Default
+            </label>
+            <label style="display:flex;gap:8px;align-items:center">
+              <input type="radio" name="tema" value="custom" id="temaCustom"/> Custom
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div id="customPicker" class="grid grid-3 hidden" style="margin-top:8px">
+        <div>
+          <label>Warna Utama (tombol)</label>
+          <input type="color" id="pickPrimary" value="#2563eb"/>
+        </div>
+        <div>
+          <label>Warna Aksen</label>
+          <input type="color" id="pickAccent" value="#10b981"/>
+        </div>
+        <div>
+          <label>Warna Latar</label>
+          <input type="color" id="pickBg" value="#f5f5f5"/>
+        </div>
+      </div>
+
+      <div class="row" style="margin-top:12px">
+        <button id="btnMasuk">Masuk</button>
+        <button id="btnReset" class="btn-secondary">Reset</button>
+      </div>
+      <div id="statusLogin" class="status"></div>
+    </div>
+  </div>
+
+  <!-- ============ APP / KASIR ============ -->
+  <div id="appView" class="hidden">
+    <div class="header">
+      <div class="title">
+        <h1 id="judulToko">Kasir</h1>
+        <span class="badge" id="temaBadge">Default</span>
+      </div>
+      <div class="row" style="min-width:280px">
+        <button id="btnPengaturan" class="btn-secondary btn-small">Pengaturan</button>
+        <button id="btnLogout" class="btn-danger btn-small">Keluar</button>
+      </div>
+    </div>
+
+    <!-- Pengaturan ringkas -->
+    <div id="panelPengaturan" class="card hidden" style="margin-bottom:16px">
+      <h3>⚙️ Pengaturan Cepat</h3>
+      <div class="grid grid-3" style="margin-top:8px">
+        <div>
+          <label>Nama Toko</label>
+          <input id="pengaturanNamaToko" type="text"/>
+        </div>
+        <div>
+          <label>Tema</label>
+          <select id="pengaturanTema">
+            <option value="default">Default</option>
+            <option value="custom">Custom</option>
+          </select>
+        </div>
+        <div class="row" style="align-items:end">
+          <button id="btnSimpanPengaturan" class="btn-accent">Simpan</button>
+        </div>
+      </div>
+      <div id="customPickerInline" class="grid grid-3 hidden" style="margin-top:8px">
+        <div>
+          <label>Warna Utama</label>
+          <input type="color" id="pickPrimaryInline" value="#2563eb"/>
+        </div>
+        <div>
+          <label>Warna Aksen</label>
+          <input type="color" id="pickAccentInline" value="#10b981"/>
+        </div>
+        <div>
+          <label>Warna Latar</label>
+          <input type="color" id="pickBgInline" value="#f5f5f5"/>
+        </div>
+      </div>
+      <div id="statusPengaturan" class="status"></div>
+    </div>
+
+    <div class="grid grid-3">
+      <!-- Pilih Barang -->
+      <div class="card">
+        <h2>Pilih Barang</h2>
+        <label>Nama Barang</label>
+        <select id="barangSelect"></select>
+        <label>Jumlah</label>
+        <input type="number" id="jumlah" min="1" value="1"/>
+        <button id="btnTambahKeranjang">Tambah ke Keranjang</button>
+      </div>
+
+      <!-- Tambah Barang Baru -->
+      <div class="card">
+        <h2>Tambah Barang Baru</h2>
+        <label>Nama Barang</label>
+        <input type="text" id="barangBaru" placeholder="Contoh: Susu UHT 1L"/>
+        <label>Harga (Rp)</label>
+        <input type="number" id="hargaBaru" min="0" placeholder="Contoh: 18000"/>
+        <button id="btnSimpanBarang">Simpan Barang</button>
+        <div id="statusTambah" class="status"></div>
+      </div>
+
+      <!-- Daftar Barang -->
+      <div class="card">
+        <h2>Daftar Barang</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Nama</th>
+              <th>Harga</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody id="daftarBarangTable"></tbody>
+        </table>
+        <div id="statusBarang" class="status"></div>
+      </div>
+    </div>
+
+    <!-- Keranjang -->
+    <div class="card" style="margin-top:16px">
+      <h2>Keranjang Belanja</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Nama Barang</th>
+            <th>Jumlah</th>
+            <th>Harga Satuan</th>
+            <th>Subtotal</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody id="keranjangBody"></tbody>
+      </table>
+      <h3>Total: <span id="totalBelanja">Rp0</span></h3>
+    </div>
+
+    <!-- Pembayaran -->
+    <div class="card">
+      <h2>Pembayaran</h2>
+      <div class="grid grid-3">
+        <div>
+          <label>Uang Pembeli (Rp)</label>
+          <input type="number" id="uangPembeli" min="0" placeholder="Contoh: 50000"/>
+        </div>
+        <div class="row" style="align-items:end">
+          <button id="btnHitung" class="btn-accent">Hitung Kembalian</button>
+        </div>
+        <div>
+          <h3 style="margin-top:24px">Kembalian: <span id="kembalian">Rp0</span></h3>
+        </div>
+      </div>
+      <div class="row" style="margin-top:8px">
+        <button id="btnCetak" class="btn-warning">Cetak Struk</button>
+        <button id="btnBersihkan" class="btn-secondary">Bersihkan Keranjang</button>
+      </div>
+    </div>
+
+    <!-- Struk -->
+    <div id="strukBox" class="card hidden">
+      <h2>🧾 Struk Belanja</h2>
+      <pre id="struk" style="white-space:pre-wrap"></pre>
+    </div>
+  </div>
+</div>
+
+<script>
+// ---------- Data ----------
+let store = {
+  nama: "AJAIWEB Mart",
+  tema: "default",
+  colors: { primary:"#2563eb", accent:"#10b981", bg:"#f5f5f5" }
+};
+
+let daftarBarang = [
+  { nama: "Aqua Botol 600ml", harga: 5000 },
+  { nama: "Indomie Goreng", harga: 3500 },
+  { nama: "Roti Coklat", harga: 7000 },
+  { nama: "Kopi Good Day", harga: 3000 }
+];
+
+let keranjang = [];
+
+// ---------- Helpers ----------
+const qs = (s)=>document.querySelector(s);
+const qsa = (s)=>document.querySelectorAll(s);
+const fmtID = (n)=> new Intl.NumberFormat('id-ID').format(n);
+const rupiah = (n)=> `Rp${fmtID(n||0)}`;
+const setStatus = (el,msg,isErr=false)=>{ el.textContent=msg; el.classList.toggle('error',!!isErr); if(msg) setTimeout(()=>{el.textContent=""},2000); };
+
+// ---------- Theme ----------
+function applyTheme(){
+  document.documentElement.style.setProperty('--bg', store.colors.bg);
+  document.documentElement.style.setProperty('--primary', store.colors.primary);
+  document.documentElement.style.setProperty('--accent', store.colors.accent);
+  qs('#temaBadge').textContent = store.tema === 'custom' ? 'Custom' : 'Default';
+}
+
+function setTheme(mode, colors){
+  store.tema = mode;
+  if(mode==='default'){
+    store.colors = { primary:"#2563eb", accent:"#10b981", bg:"#f5f5f5" };
+  } else {
+    if(colors) store.colors = {...store.colors, ...colors};
+  }
+  applyTheme();
+  saveLocal();
+}
+
+// ---------- Local Storage ----------
+function saveLocal(){
+  localStorage.setItem('kasirStore', JSON.stringify(store));
+  localStorage.setItem('kasirBarang', JSON.stringify(daftarBarang));
+}
+function loadLocal(){
+  const a = localStorage.getItem('kasirStore');
+  const b = localStorage.getItem('kasirBarang');
+  if(a){ try{ store = JSON.parse(a);}catch{} }
+  if(b){ try{ daftarBarang = JSON.parse(b);}catch{} }
+}
+
+// ---------- UI Bind ----------
+function updateJudul(){
+  qs('#judulToko').textContent = `Kasir ${store.nama}`;
+}
+function updateBarangSelect(){
+  const s = qs('#barangSelect');
+  s.innerHTML = "";
+  daftarBarang.forEach((item, i)=>{
+    const opt = document.createElement('option');
+    opt.value = i;
+    opt.textContent = `${item.nama} — ${rupiah(item.harga)}`;
+    s.appendChild(opt);
+  });
+}
+function renderDaftarBarang(){
+  const tb = qs('#daftarBarangTable');
+  tb.innerHTML = "";
+  daftarBarang.forEach((item,i)=>{
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><input type="text" id="editNama${i}" value="${item.nama}"/></td>
+      <td><input type="number" id="editHarga${i}" value="${item.harga}" min="0"/></td>
+      <td>
+        <button class="btn-small btn-accent" data-act="save" data-i="${i}">Simpan</button>
+        <button class="btn-small btn-danger" data-act="del" data-i="${i}">Hapus</button>
+      </td>
+    `;
+    tb.appendChild(tr);
+  });
+}
+function updateKeranjang(){
+  const tb = qs('#keranjangBody');
+  tb.innerHTML = "";
+  let total = 0;
+  keranjang.forEach((it, idx)=>{
+    const sub = it.harga * it.jumlah;
+    total += sub;
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${it.nama}</td>
+      <td>
+        <input type="number" min="1" value="${it.jumlah}" data-act="chgQty" data-i="${idx}" style="width:90px"/>
+      </td>
+      <td>${rupiah(it.harga)}</td>
+      <td>${rupiah(sub)}</td>
+      <td><button class="btn-small btn-danger" data-act="rmCart" data-i="${idx}">Hapus</button></td>
+    `;
+    tb.appendChild(tr);
+  });
+  qs('#totalBelanja').textContent = rupiah(total);
+  saveLocal();
+}
+
+// ---------- Events: Login ----------
+function bindLogin(){
+  const temaDefault = qs('#temaDefault');
+  const temaCustom = qs('#temaCustom');
+  const picker = qs('#customPicker');
+
+  const reflectPicker = ()=> picker.classList.toggle('hidden', !temaCustom.checked);
+  temaDefault.addEventListener('change', reflectPicker);
+  temaCustom.addEventListener('change', reflectPicker);
+  reflectPicker();
+
+  qs('#btnMasuk').addEventListener('click', ()=>{
+    const nama = qs('#namaToko').value.trim();
+    const isCustom = temaCustom.checked;
+    if(!nama){
+      setStatus(qs('#statusLogin'), 'Nama toko wajib diisi', true);
+      return;
+    }
+    store.nama = nama;
+    if(isCustom){
+      setTheme('custom', {
+        primary: qs('#pickPrimary').value,
+        accent: qs('#pickAccent').value,
+        bg: qs('#pickBg').value
+      });
+    } else {
+      setTheme('default');
+    }
+    updateJudul();
+    saveLocal();
+    // switch view
+    qs('#loginView').classList.add('hidden');
+    qs('#appView').classList.remove('hidden');
+  });
+
+  qs('#btnReset').addEventListener('click', ()=>{
+    localStorage.removeItem('kasirStore');
+    localStorage.removeItem('kasirBarang');
+    setStatus(qs('#statusLogin'), 'Reset berhasil. Field dikosongkan.');
+    qs('#namaToko').value = '';
+    temaDefault.checked = true;
+    temaCustom.checked = false;
+    picker.classList.add('hidden');
+  });
+
+  // Prefill dari localStorage
+  const hasStore = localStorage.getItem('kasirStore');
+  if(hasStore){
+    qs('#namaToko').value = store.nama || '';
+    if(store.tema==='custom'){
+      temaCustom.checked = true; temaDefault.checked = false;
+      picker.classList.remove('hidden');
+      qs('#pickPrimary').value = store.colors.primary || '#2563eb';
+      qs('#pickAccent').value = store.colors.accent || '#10b981';
+      qs('#pickBg').value = store.colors.bg || '#f5f5f5';
+    }
+  }
+}
+
+// ---------- Events: App ----------
+function bindApp(){
+  // tombol header
+  qs('#btnLogout').addEventListener('click', ()=>{
+    qs('#appView').classList.add('hidden');
+    qs('#loginView').classList.remove('hidden');
+    setStatus(qs('#statusLogin'), 'Silakan login kembali.');
+  });
+  qs('#btnPengaturan').addEventListener('click', ()=>{
+    qs('#panelPengaturan').classList.toggle('hidden');
+    // isi nilai saat panel dibuka
+    qs('#pengaturanNamaToko').value = store.nama;
+    qs('#pengaturanTema').value = store.tema;
+    qs('#pickPrimaryInline').value = store.colors.primary;
+    qs('#pickAccentInline').value = store.colors.accent;
+    qs('#pickBgInline').value = store.colors.bg;
+    toggleInlinePickers();
+  });
+  const toggleInlinePickers = ()=>{
+    qs('#customPickerInline').classList.toggle('hidden', qs('#pengaturanTema').value!=='custom');
+  };
+  qs('#pengaturanTema').addEventListener('change', toggleInlinePickers);
+
+  qs('#btnSimpanPengaturan').addEventListener('click', ()=>{
+    const name = qs('#pengaturanNamaToko').value.trim();
+    const mode = qs('#pengaturanTema').value;
+    if(!name){ setStatus(qs('#statusPengaturan'),'Nama toko tidak boleh kosong',true); return; }
+    store.nama = name;
+    if(mode==='custom'){
+      setTheme('custom',{
+        primary: qs('#pickPrimaryInline').value,
+        accent: qs('#pickAccentInline').value,
+        bg: qs('#pickBgInline').value
+      });
+    } else {
+      setTheme('default');
+    }
+    updateJudul();
+    saveLocal();
+    setStatus(qs('#statusPengaturan'),'Pengaturan disimpan');
+  });
+
+  // Pilih/Tambah barang
+  qs('#btnSimpanBarang').addEventListener('click', ()=>{
+    const nama = qs('#barangBaru').value.trim();
+    const harga = parseInt(qs('#hargaBaru').value||0,10);
+    const s = qs('#statusTambah');
+    if(!nama || !harga || harga<=0){ setStatus(s,'Nama & harga harus valid',true); return; }
+    daftarBarang.push({nama, harga});
+    qs('#barangBaru').value=''; qs('#hargaBaru').value='';
+    updateBarangSelect(); renderDaftarBarang(); saveLocal();
+    setStatus(s,'Barang baru berhasil ditambahkan');
+  });
+
+  // Daftar barang: delegasi klik
+  qs('#daftarBarangTable').addEventListener('click', (e)=>{
+    const act = e.target.getAttribute('data-act');
+    const i = parseInt(e.target.getAttribute('data-i'),10);
+    if(Number.isNaN(i)) return;
+    const st = qs('#statusBarang');
+    if(act==='save'){
+      const nama = (qs(`#editNama${i}`)?.value||'').trim();
+      const harga = parseInt(qs(`#editHarga${i}`)?.value||0,10);
+      if(!nama || !harga || harga<=0){ setStatus(st,'Isi nama & harga dengan benar',true); return; }
+      daftarBarang[i] = { nama, harga };
+      updateBarangSelect(); renderDaftarBarang(); saveLocal();
+      setStatus(st,'Barang diperbarui');
+    }
+    if(act==='del'){
+      daftarBarang.splice(i,1);
+      updateBarangSelect(); renderDaftarBarang(); saveLocal();
+      setStatus(st,'Barang dihapus');
+    }
+  });
+
+  // Keranjang
+  qs('#btnTambahKeranjang').addEventListener('click', ()=>{
+    const idx = parseInt(qs('#barangSelect').value||0,10);
+    const qty = parseInt(qs('#jumlah').value||0,10);
+    if(qty<=0) return;
+    const ref = daftarBarang[idx];
+    // jika barang sama sudah ada, tambahkan qty
+    const existing = keranjang.findIndex(k=>k.nama===ref.nama && k.harga===ref.harga);
+    if(existing>-1){ keranjang[existing].jumlah += qty; }
+    else { keranjang.push({nama:ref.nama, harga:ref.harga, jumlah:qty}); }
+    updateKeranjang();
+  });
+
+  // Keranjang: change qty / remove
+  qs('#keranjangBody').addEventListener('input', (e)=>{
+    const act = e.target.getAttribute('data-act');
+    if(act==='chgQty'){
+      const i = parseInt(e.target.getAttribute('data-i'),10);
+      const val = Math.max(1, parseInt(e.target.value||1,10));
+      keranjang[i].jumlah = val;
+      updateKeranjang();
+    }
+  });
+  qs('#keranjangBody').addEventListener('click', (e)=>{
+    const act = e.target.getAttribute('data-act');
+    if(act==='rmCart'){
+      const i = parseInt(e.target.getAttribute('data-i'),10);
+      keranjang.splice(i,1);
+      updateKeranjang();
+    }
+  });
+
+  // Pembayaran & Struk
+  qs('#btnHitung').addEventListener('click', ()=>{
+    const total = keranjang.reduce((a,c)=>a+c.harga*c.jumlah,0);
+    const uang = parseInt(qs('#uangPembeli').value||0,10);
+    const kmb = uang - total;
+    qs('#kembalian').textContent = kmb>=0 ? rupiah(kmb) : 'Uang kurang';
+  });
+
+  qs('#btnBersihkan').addEventListener('click', ()=>{
+    keranjang = [];
+    updateKeranjang();
+    qs('#kembalian').textContent = 'Rp0';
+  });
+
+  qs('#btnCetak').addEventListener('click', ()=>{
+    const tanggal = new Date();
+    const header = `=== ${store.nama} ===\n${tanggal.toLocaleString('id-ID')}\n`;
+    let body = '';
+    let total = 0;
+    keranjang.forEach(it=>{
+      const sub = it.harga*it.jumlah;
+      total+=sub;
+      body += `${it.nama} x${it.jumlah} @${rupiah(it.harga)} = ${rupiah(sub)}\n`;
+    });
+    const bayar = parseInt(qs('#uangPembeli').value||0,10);
+    const kmb = bayar - total;
+    const footer = `---------------------------\nTotal: ${rupiah(total)}\nBayar: ${rupiah(bayar)}\nKembalian: ${kmb>=0?rupiah(kmb):'Uang kurang'}\nTerima kasih!\n===========================`;
+    qs('#struk').textContent = header + body + footer;
+    qs('#strukBox').classList.remove('hidden');
+  });
+}
+
+// ---------- Init ----------
+(function init(){
+  loadLocal();           // load prefs
+  applyTheme();          // apply theme
+  updateJudul();
+  updateBarangSelect();
+  renderDaftarBarang();
+  updateKeranjang();
+
+  bindLogin();
+  bindApp();
+})();
+</script>
+</body>
+</html>
