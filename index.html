@@ -1,466 +1,190 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Kasir Khas</title>
-<link rel="icon" href="data:,">
-<style>
-  :root{
-    --bg:#0f172a; --surface:#0b1220; --card:#0e1627; --muted:#93a4b8; --text:#e6edf3;
-    --primary:#22c55e; --primary-weak:#1b9f4b; --border:#1f2b40; --danger:#ef4444; --warning:#f59e0b;
-    --radius:14px;
-  }
-  *{box-sizing:border-box}
-  html,body{height:100%;margin:0;background:var(--bg);color:var(--text);font:14px/1.45 system-ui,Segoe UI,Roboto,Arial}
-  .hidden{display:none!important}
-  .btn{border:none;padding:9px 12px;border-radius:10px;cursor:pointer;background:#1a2538;color:#cbd5e1;transition:.15s}
-  .btn:hover{filter:brightness(1.1)}
-  .btn-primary{background:var(--primary);color:#052b17}
-  .btn-danger{background:var(--danger);color:#fff}
-  .btn-ghost{background:transparent;border:1px solid var(--border)}
-  input,select{width:100%;padding:10px;border-radius:10px;border:1px solid var(--border);background:#0a1221;color:var(--text)}
-  label{font-size:12px;color:var(--muted);display:block;margin:8px 0 4px}
-  hr{border:none;border-top:1px solid var(--border);margin:12px 0}
-
-  /* ===== LOGIN ===== */
-  .login-wrap{display:grid;place-items:center;height:100%}
-  .login-card{width:min(560px,92vw);background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:22px;box-shadow:0 10px 30px rgba(0,0,0,.25)}
-  .app-title{font-size:22px;margin:0 0 10px}
-  .row{display:flex;gap:10px}
-  .row>*{flex:1}
-  .theme-chip{display:flex;gap:8px;align-items:center;margin-top:6px}
-  .swatch{width:28px;height:28px;border-radius:8px;border:1px solid var(--border)}
-
-  /* ===== APP LAYOUT ===== */
-  .app{display:grid;grid-template-columns:330px 1fr 380px;gap:12px;padding:12px;height:100%}
-  .col{background:var(--surface);border:1px solid var(--border);border-radius:20px;overflow:auto}
-  .pane{padding:14px}
-  .title{margin:0 0 6px;font-size:19px}
-  .subtitle{color:var(--muted);font-size:12px;margin-bottom:8px}
-  .toolbar{display:flex;gap:8px;flex-wrap:wrap}
-  .list{margin-top:8px}
-  .item{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:10px;border:1px solid var(--border);border-radius:12px;background:var(--card);margin-bottom:8px}
-  .item h4{margin:0;font-size:14px}
-  .price{color:#cbd5e1;font-weight:600}
-  .chip{display:inline-block;padding:2px 8px;border-radius:999px;background:#0c1526;border:1px solid var(--border);color:#9fb1c8;font-size:12px}
-
-  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-  .grid3{display:grid;grid-template-columns:1fr auto auto;gap:8px}
-
-  /* ===== MODAL ===== */
-  .modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;padding:16px}
-  .modal.show{display:flex}
-  .modal-card{width:min(640px,96vw);background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:14px}
-  .result{max-height:50vh;overflow:auto;margin-top:8px}
-  .result .rowx{display:grid;grid-template-columns:1fr auto;gap:8px;align-items:center;padding:8px;border-bottom:1px dashed var(--border)}
-  .result .rowx:hover{background:#111c31}
-
-  /* ===== CART ===== */
-  .cart-row{display:grid;grid-template-columns:1fr auto auto auto;gap:8px;align-items:center;padding:8px;border-bottom:1px dashed var(--border)}
-  .qty{display:flex;gap:6px}
-  .qty button{width:28px}
-  .tot{display:flex;justify-content:space-between;align-items:center;padding:10px;border-top:1px solid var(--border);position:sticky;bottom:0;background:var(--surface)}
-  .big{font-size:18px;font-weight:700}
-
-  /* ===== TOAST ===== */
-  .toast{position:fixed;left:16px;bottom:16px;background:#0b1426;color:#d9e2ef;border:1px solid var(--border);padding:10px 12px;border-radius:10px;opacity:0;transform:translateY(8px);transition:.25s}
-  .toast.show{opacity:1;transform:translateY(0)}
-  .toast.warn{background:#221a07;color:#ffe9b3;border-color:#3a2a05}
-  .toast.err{background:#2a0f13;color:#ffd5d5;border-color:#3d161b}
-
-  @media (max-width: 1080px){
-    .app{grid-template-columns:1fr;grid-auto-rows:auto}
-    .col{height:auto;max-height:none}
-  }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kasir Khas</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f4f6f9;
+      color: #333;
+    }
+    header {
+      background: #0078D7;
+      color: white;
+      padding: 15px;
+      text-align: center;
+    }
+    .container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+    .card {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      margin-bottom: 20px;
+      width: 400px;
+    }
+    h2 {
+      margin-top: 0;
+    }
+    input, select, button {
+      width: 100%;
+      padding: 10px;
+      margin: 5px 0;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background: #0078D7;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    button:hover {
+      background: #005fa3;
+    }
+    .hidden {
+      display: none;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: center;
+    }
+    th {
+      background: #0078D7;
+      color: white;
+    }
+    .total {
+      font-size: 18px;
+      font-weight: bold;
+      margin-top: 10px;
+      text-align: right;
+    }
+  </style>
 </head>
 <body>
+  <header>
+    <h1 id="storeName">Kasir Khas</h1>
+  </header>
 
-<!-- ============ LOGIN ============ -->
-<section id="loginView" class="login-wrap">
-  <div class="login-card">
-    <h1 class="app-title">🧾 Kasir Khas</h1>
-    <p class="subtitle">Masuk dulu ya. Pilih tema: <span class="chip">F3 = Cari Produk</span> (setelah login)</p>
-    <div class="row">
-      <div>
-        <label>Nama Toko</label>
-        <input id="storeName" placeholder="Contoh: Toko Makmur">
-      </div>
-      <div>
-        <label>Nama Kasir (opsional)</label>
-        <input id="cashierName" placeholder="Kasir Andi">
-      </div>
+  <div class="container">
+    <!-- Login -->
+    <div id="loginPage" class="card">
+      <h2>Login Toko</h2>
+      <input type="text" id="storeInput" placeholder="Masukkan nama toko">
+      <label for="theme">Pilih Tema:</label>
+      <select id="theme">
+        <option value="default">Default</option>
+        <option value="custom">Custom (warna sendiri)</option>
+      </select>
+      <input type="color" id="customColor" class="hidden">
+      <button onclick="login()">Masuk</button>
     </div>
 
-    <hr>
-    <div class="row">
-      <div>
-        <label>Tema</label>
-        <select id="themeSelect">
-          <option value="default">Default</option>
-          <option value="custom">Custom</option>
-        </select>
-      </div>
-      <div>
-        <label>Warna Aksen (kalau Custom)</label>
-        <input id="accentPicker" type="color" value="#22c55e">
-      </div>
-    </div>
-    <div class="theme-chip">
-      <span class="swatch" id="swatch" style="background:#22c55e"></span>
-      <span class="subtitle">Aksen UI</span>
-    </div>
+    <!-- Kasir -->
+    <div id="kasirPage" class="hidden card">
+      <h2>Kasir</h2>
+      <input type="text" id="productName" placeholder="Nama Produk">
+      <input type="number" id="productPrice" placeholder="Harga Produk">
+      <input type="number" id="productQty" placeholder="Jumlah" value="1">
+      <button onclick="addProduct()">Tambah ke Keranjang</button>
 
-    <div class="row" style="margin-top:12px">
-      <button class="btn btn-primary" id="btnLogin">Masuk</button>
-      <button class="btn btn-ghost" id="btnFillDemo">Isi Contoh</button>
-    </div>
-    <div id="loginMsg" class="subtitle" style="margin-top:8px"></div>
-  </div>
-</section>
+      <table id="cartTable">
+        <thead>
+          <tr>
+            <th>Produk</th>
+            <th>Harga</th>
+            <th>Qty</th>
+            <th>Total</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
 
-<!-- ============ APP ============ -->
-<section id="appView" class="hidden app">
-
-  <!-- ===== Produk (kiri) ===== -->
-  <div class="col">
-    <div class="pane">
-      <h2 class="title">Daftar Produk</h2>
-      <div class="toolbar">
-        <span class="chip">Klik + untuk tambah ke keranjang</span>
-        <span class="chip">Ctrl+N: fokus tambah produk</span>
-      </div>
-
-      <div id="productList" class="list"></div>
-
-      <hr>
-      <h3 class="title" style="font-size:16px">Tambah / Edit Produk</h3>
-      <div class="grid2">
-        <div>
-          <label>Nama</label>
-          <input id="pName" placeholder="Contoh: Kopi Botol">
-        </div>
-        <div>
-          <label>Harga (Rp)</label>
-          <input id="pPrice" type="number" min="0" placeholder="6500">
-        </div>
-      </div>
-      <div class="grid3" style="margin-top:8px">
-        <button class="btn" id="btnClearForm">Bersihkan</button>
-        <button class="btn btn-primary" id="btnSaveProduct">Simpan</button>
-        <button class="btn btn-danger" id="btnDeleteProduct">Hapus</button>
-      </div>
-      <div id="editHint" class="subtitle">Mode: tambah produk baru</div>
+      <div class="total">Total: Rp <span id="grandTotal">0</span></div>
     </div>
   </div>
 
-  <!-- ===== Tengah ===== -->
-  <div class="col">
-    <div class="pane">
-      <h2 class="title" id="storeTitle">Kasir Khas</h2>
-      <p class="subtitle">
-        <b>Shortcut:</b> <b>F3</b> buka pencarian produk • <b>Esc</b> tutup modal
-      </p>
-      <div class="toolbar" style="margin-top:8px">
-        <button class="btn" id="btnOpenSearch">🔎 Cari (F3)</button>
-        <button class="btn" id="btnResetData">♻️ Reset Data</button>
-        <span class="chip" id="cashierBadge"></span>
-      </div>
-      <hr>
-      <p class="subtitle">Tips: klik produk di kiri untuk menambahkan ke keranjang. Semua perubahan otomatis disimpan di browser (localStorage).</p>
-    </div>
-  </div>
+  <script>
+    let cart = [];
 
-  <!-- ===== Keranjang (kanan) ===== -->
-  <div class="col">
-    <div class="pane">
-      <h2 class="title">Keranjang</h2>
-      <div id="cartList"></div>
-      <div class="tot">
-        <div class="big">Total</div>
-        <div class="big" id="grandTotal">Rp 0</div>
-      </div>
-    </div>
-  </div>
-</section>
+    function login() {
+      const store = document.getElementById('storeInput').value;
+      const theme = document.getElementById('theme').value;
+      const customColor = document.getElementById('customColor').value;
 
-<!-- ===== Modal Pencarian (F3) ===== -->
-<div id="searchModal" class="modal" aria-hidden="true">
-  <div class="modal-card">
-    <div class="row" style="align-items:end">
-      <div style="flex:1">
-        <label>Cari Produk</label>
-        <input id="searchInput" placeholder="Ketik nama produk…">
-      </div>
-      <button class="btn btn-ghost" id="btnCloseModal">Tutup</button>
-    </div>
-    <div id="searchResult" class="result"></div>
-  </div>
-</div>
+      if (store.trim() === "") {
+        alert("Nama toko harus diisi!");
+        return;
+      }
 
-<!-- ===== Toast ===== -->
-<div id="toast" class="toast">Siap!</div>
+      document.getElementById("storeName").innerText = store;
+      document.getElementById("loginPage").classList.add("hidden");
+      document.getElementById("kasirPage").classList.remove("hidden");
 
-<script>
-/* =========================
-   STORAGE & STATE
-========================= */
-const LS_PRODUCTS = 'kasir_khas_products_v1';
-const LS_SESSION  = 'kasir_khas_session_v1';
-
-let products = loadProducts();
-let cart = [];
-let editId = null;
-
-// seed jika kosong
-if(!products || !Array.isArray(products) || !products.length){
-  products = [
-    {id: genId(), name:'Indomie Goreng', price:3000},
-    {id: genId(), name:'Teh Botol', price:5000},
-    {id: genId(), name:'Roti', price:7000},
-  ];
-  saveProducts();
-}
-
-/* =========================
-   UTIL
-========================= */
-const $ = s=>document.querySelector(s);
-function money(n){ return 'Rp ' + (n||0).toLocaleString('id-ID'); }
-function genId(){ return 'p' + Math.random().toString(36).slice(2,10); }
-function toast(msg,type=''){
-  const t = $('#toast'); t.textContent = msg; t.className = 'toast show' + (type?(' '+type):'');
-  setTimeout(()=>t.classList.remove('show'), 1600);
-}
-function saveProducts(){ localStorage.setItem(LS_PRODUCTS, JSON.stringify(products)); }
-function loadProducts(){ try{return JSON.parse(localStorage.getItem(LS_PRODUCTS)||'[]')}catch{return[]} }
-function saveSession(obj){ localStorage.setItem(LS_SESSION, JSON.stringify(obj)); }
-function loadSession(){ try{return JSON.parse(localStorage.getItem(LS_SESSION)||'null')}catch{return null} }
-
-/* =========================
-   LOGIN
-========================= */
-const session = loadSession();
-if(session && session.store){
-  applyTheme(session);
-  $('#loginView').classList.add('hidden');
-  $('#appView').classList.remove('hidden');
-  initApp(session);
-} else {
-  // login view
-  $('#accentPicker').addEventListener('input', e=>{
-    $('#swatch').style.background = e.target.value;
-  });
-  $('#btnFillDemo').onclick = ()=>{
-    $('#storeName').value = 'Toko Makmur';
-    $('#cashierName').value = 'Kasir Andi';
-    $('#themeSelect').value = 'custom';
-    $('#accentPicker').value = '#22c55e';
-    $('#swatch').style.background = '#22c55e';
-  };
-  $('#btnLogin').onclick = ()=>{
-    const store = $('#storeName').value.trim();
-    const cashier = $('#cashierName').value.trim();
-    const theme = $('#themeSelect').value;
-    const accent = $('#accentPicker').value;
-    if(!store){ $('#loginMsg').textContent = 'Nama toko belum diisi.'; return; }
-    const sess = {store, cashier, theme, accent};
-    saveSession(sess);
-    applyTheme(sess);
-    $('#loginView').classList.add('hidden');
-    $('#appView').classList.remove('hidden');
-    initApp(sess);
-    toast('Masuk sebagai "'+store+'".');
-  };
-}
-
-function applyTheme(sess){
-  if(sess?.theme === 'custom' && sess.accent){
-    document.documentElement.style.setProperty('--primary', sess.accent);
-    document.documentElement.style.setProperty('--primary-weak', sess.accent);
-  } else {
-    document.documentElement.style.setProperty('--primary', '#22c55e');
-    document.documentElement.style.setProperty('--primary-weak', '#1b9f4b');
-  }
-}
-
-/* =========================
-   APP INIT
-========================= */
-function initApp(sess){
-  $('#storeTitle').textContent = sess.store || 'Kasir Khas';
-  $('#cashierBadge').textContent = sess.cashier ? ('👤 ' + sess.cashier) : '';
-  renderProducts();
-  renderCart();
-
-  // events form
-  $('#btnSaveProduct').onclick = saveProductFromForm;
-  $('#btnDeleteProduct').onclick = deleteSelectedProduct;
-  $('#btnClearForm').onclick  = clearForm;
-
-  // modal search
-  $('#btnOpenSearch').onclick = openSearch;
-  $('#btnCloseModal').onclick = closeSearch;
-  $('#searchInput').addEventListener('input', renderSearch);
-
-  // reset data
-  $('#btnResetData').onclick = ()=>{
-    if(confirm('Reset semua data (produk & sesi)?')){ // satu2nya dialog native yang wajar
-      localStorage.removeItem(LS_PRODUCTS);
-      localStorage.removeItem(LS_SESSION);
-      location.reload();
+      if (theme === "custom") {
+        document.querySelector("header").style.background = customColor || "#0078D7";
+      }
     }
-  };
 
-  // shortcuts
-  document.addEventListener('keydown', (e)=>{
-    if(e.key==='F3'){ e.preventDefault(); openSearch(); }
-    if(e.key==='Escape'){ closeSearch(); }
-    if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='n'){
-      e.preventDefault(); $('#pName').focus(); toast('Fokus ke tambah produk');
+    document.getElementById("theme").addEventListener("change", function() {
+      const customColorPicker = document.getElementById("customColor");
+      if (this.value === "custom") {
+        customColorPicker.classList.remove("hidden");
+      } else {
+        customColorPicker.classList.add("hidden");
+      }
+    });
+
+    function addProduct() {
+      const name = document.getElementById("productName").value;
+      const price = parseFloat(document.getElementById("productPrice").value);
+      const qty = parseInt(document.getElementById("productQty").value);
+
+      if (!name || isNaN(price) || isNaN(qty)) {
+        alert("Lengkapi data produk!");
+        return;
+      }
+
+      const total = price * qty;
+      cart.push({ name, price, qty, total });
+      renderCart();
     }
-  });
 
-  // klik backdrop modal untuk menutup
-  $('#searchModal').addEventListener('click', (e)=>{
-    if(e.target.id==='searchModal') closeSearch();
-  });
-}
+    function renderCart() {
+      const tbody = document.querySelector("#cartTable tbody");
+      tbody.innerHTML = "";
 
-/* =========================
-   PRODUK LIST
-========================= */
-function renderProducts(){
-  const wrap = $('#productList');
-  wrap.innerHTML = '';
-  products
-    .slice()
-    .sort((a,b)=>a.name.localeCompare(b.name))
-    .forEach(p=>{
-      const el = document.createElement('div');
-      el.className = 'item';
-      el.innerHTML = `
-        <div>
-          <h4>${p.name}</h4>
-          <div class="subtitle">${money(p.price)}</div>
-        </div>
-        <div class="toolbar" style="gap:6px">
-          <button class="btn" data-act="edit">✏️</button>
-          <button class="btn btn-primary" data-act="add">＋</button>
-        </div>
-      `;
-      el.querySelector('[data-act="edit"]').onclick = ()=>{
-        editId = p.id;
-        $('#pName').value = p.name;
-        $('#pPrice').value = p.price;
-        $('#editHint').textContent = 'Mode: edit "'+p.name+'"';
-        toast('Edit produk: '+p.name);
-      };
-      el.querySelector('[data-act="add"]').onclick = ()=> addToCart(p.id);
-      wrap.appendChild(el);
-    });
-}
+      let grandTotal = 0;
+      cart.forEach(item => {
+        grandTotal += item.total;
+        tbody.innerHTML += `
+          <tr>
+            <td>${item.name}</td>
+            <td>Rp ${item.price}</td>
+            <td>${item.qty}</td>
+            <td>Rp ${item.total}</td>
+          </tr>
+        `;
+      });
 
-function clearForm(){
-  editId = null;
-  $('#pName').value = '';
-  $('#pPrice').value = '';
-  $('#editHint').textContent = 'Mode: tambah produk baru';
-}
-
-function saveProductFromForm(){
-  const name = $('#pName').value.trim();
-  const price = parseInt($('#pPrice').value,10);
-  if(!name || isNaN(price) || price<0){ toast('Nama/harga belum benar', 'warn'); return; }
-  if(editId){
-    const p = products.find(x=>x.id===editId);
-    if(!p) return;
-    p.name = name; p.price = price;
-    toast('Produk diperbarui');
-  }else{
-    products.push({id:genId(), name, price});
-    toast('Produk ditambahkan');
-  }
-  saveProducts(); renderProducts(); clearForm();
-}
-
-function deleteSelectedProduct(){
-  if(!editId){ toast('Pilih produk yang mau dihapus', 'warn'); return; }
-  products = products.filter(x=>x.id!==editId);
-  saveProducts(); renderProducts(); clearForm();
-  toast('Produk dihapus','err');
-}
-
-/* =========================
-   CART
-========================= */
-function addToCart(pid){
-  const p = products.find(x=>x.id===pid);
-  if(!p){ toast('Produk tidak ditemukan','err'); return; }
-  const found = cart.find(x=>x.id===pid);
-  if(found){ found.qty += 1; }
-  else{ cart.push({id:pid, name:p.name, price:p.price, qty:1}); }
-  renderCart();
-  toast('Ditambahkan: '+p.name);
-}
-
-function renderCart(){
-  const wrap = $('#cartList'); wrap.innerHTML='';
-  let total = 0;
-  cart.forEach((c,i)=>{
-    total += c.price * c.qty;
-    const row = document.createElement('div');
-    row.className = 'cart-row';
-    row.innerHTML = `
-      <div><b>${c.name}</b><div class="subtitle">${money(c.price)} / item</div></div>
-      <div class="qty">
-        <button class="btn" data-act="minus">−</button>
-        <div style="min-width:26px;text-align:center;line-height:28px">${c.qty}</div>
-        <button class="btn" data-act="plus">＋</button>
-      </div>
-      <div class="price">${money(c.price*c.qty)}</div>
-      <button class="btn btn-danger" data-act="rm">🗑</button>
-    `;
-    row.querySelector('[data-act="minus"]').onclick = ()=>{ c.qty=Math.max(1,c.qty-1); renderCart(); };
-    row.querySelector('[data-act="plus"]').onclick  = ()=>{ c.qty+=1; renderCart(); };
-    row.querySelector('[data-act="rm"]').onclick    = ()=>{ cart.splice(i,1); renderCart(); toast('Item dihapus','err'); };
-    wrap.appendChild(row);
-  });
-  $('#grandTotal').textContent = money(total);
-}
-
-/* =========================
-   SEARCH MODAL (F3)
-========================= */
-function openSearch(){
-  $('#searchModal').classList.add('show');
-  $('#searchInput').value=''; renderSearch();
-  $('#searchInput').focus();
-}
-function closeSearch(){ $('#searchModal').classList.remove('show'); }
-function renderSearch(){
-  const q = $('#searchInput').value.trim().toLowerCase();
-  const res = $('#searchResult'); res.innerHTML='';
-  products
-    .filter(p=>p.name.toLowerCase().includes(q))
-    .sort((a,b)=>a.name.localeCompare(b.name))
-    .forEach(p=>{
-      const row = document.createElement('div');
-      row.className='rowx';
-      row.innerHTML = `<div><b>${p.name}</b><div class="subtitle">${money(p.price)}</div></div>
-                       <button class="btn btn-primary">Tambah</button>`;
-      row.querySelector('button').onclick = ()=>{ addToCart(p.id); closeSearch(); };
-      res.appendChild(row);
-    });
-  if(!res.children.length){
-    const empty = document.createElement('div');
-    empty.className='subtitle';
-    empty.style.padding='10px';
-    empty.textContent = q ? 'Tidak ada produk yang cocok' : 'Ketik untuk mencari produk…';
-    res.appendChild(empty);
-  }
-}
-</script>
+      document.getElementById("grandTotal").innerText = grandTotal;
+    }
+  </script>
 </body>
 </html>
