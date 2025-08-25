@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -551,6 +552,47 @@ function bindApp(){
   bindLogin();
   bindApp();
 })();
+// ---------- Shortcut Keyboard ----------
+document.addEventListener('keydown', function(e) {
+  // F2: Fokus ke select barang
+  if (e.key === 'F2') {
+    e.preventDefault();
+    const barangSelect = document.getElementById('barangSelect');
+    if (barangSelect) barangSelect.focus();
+  }
+
+  // Enter: Tambah ke keranjang (saat fokus di jumlah atau barang)
+  if (e.key === 'Enter') {
+    const aktif = document.activeElement;
+    const id = aktif?.id || '';
+    if (id === 'jumlah' || id === 'barangSelect') {
+      e.preventDefault();
+      const btnTambah = document.getElementById('btnTambahKeranjang');
+      if (btnTambah) btnTambah.click();
+    }
+  }
+
+  // F4: Hitung kembalian
+  if (e.key === 'F4') {
+    e.preventDefault();
+    const btnHitung = document.getElementById('btnHitung');
+    if (btnHitung) btnHitung.click();
+  }
+
+  // Esc: Bersihkan keranjang
+  if (e.key === 'Escape') {
+    e.preventDefault();
+    const btnBersihkan = document.getElementById('btnBersihkan');
+    if (btnBersihkan) btnBersihkan.click();
+  }
+
+  // Ctrl + P: Cetak struk
+  if (e.ctrlKey && e.key.toLowerCase() === 'p') {
+    e.preventDefault();
+    const btnCetak = document.getElementById('btnCetak');
+    if (btnCetak) btnCetak.click();
+  }
+});
 </script>
 </body>
 </html>
