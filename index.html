@@ -567,6 +567,45 @@ function bindApp(){
   bindLogin();
   bindApp();
 })();
+<script>
+// ... semua kode JS kamu di atas (login, keranjang, pembayaran, dll)
+
+// ---------- Shortcut Keyboard ----------
+document.addEventListener("keydown", function(e) {
+  // ---------------- PILIH BARANG (F4) ----------------
+  if (e.key === "F4") {
+    e.preventDefault();
+    qs("#barangSelect").focus();
+  }
+
+  if (e.key === "Enter" && document.activeElement.id === "barangSelect") {
+    e.preventDefault();
+    qs("#jumlah").focus();
+  }
+
+  if (e.key === "Enter" && document.activeElement.id === "jumlah") {
+    e.preventDefault();
+    qs("#btnTambahKeranjang").click();
+    qs("#barangSelect").focus();
+  }
+
+  // ---------------- TAMBAH PRODUK BARU (F5) ----------------
+  if (e.key === "F5") {
+    e.preventDefault();
+    qs("#barangBaru").focus();
+  }
+
+  if (e.key === "Enter" && document.activeElement.id === "barangBaru") {
+    e.preventDefault();
+    qs("#hargaBaru").focus();
+  }
+
+  if (e.key === "Enter" && document.activeElement.id === "hargaBaru") {
+    e.preventDefault();
+    qs("#btnSimpanBarang").click();
+    qs("#barangBaru").focus();
+  }
+});
 </script>
 </body>
 </html>
