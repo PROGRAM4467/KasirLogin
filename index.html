@@ -566,7 +566,64 @@ function bindApp(){
 
   bindLogin();
   bindApp();
-})();
+})()
+// ---------- Shortcut Keyboard ----------
+document.addEventListener('keydown', function (e) {
+  // F5: Tambah barang baru
+  if (e.key === 'F5') {
+    e.preventDefault();
+    qs('#barangBaru').focus();
+  }
+
+  // Shift: Navigasi tambah barang baru
+  if (e.key === 'Shift') {
+    const active = document.activeElement;
+    if (active.id === 'barangBaru') {
+      qs('#hargaBaru').focus();
+    } else if (active.id === 'hargaBaru') {
+      qs('#btnSimpanBarang').click();
+    }
+  }
+
+  // F4: Input barang ke keranjang
+  if (e.key === 'F4') {
+    e.preventDefault();
+    qs('#barangSelect').focus();
+  }
+
+  if (e.key === 'Enter') {
+    const active = document.activeElement;
+    if (active.id === 'barangSelect') {
+      qs('#jumlah').focus();
+    } else if (active.id === 'jumlah') {
+      qs('#btnTambahKeranjang').click();
+    }
+  }
+
+  // F3: Fokus ke input uang pembeli
+  if (e.key === 'F3') {
+    e.preventDefault();
+    qs('#uangPembeli').focus();
+  }
+
+  // Ctrl + K: Hitung kembalian
+  if (e.ctrlKey && e.key.toLowerCase() === 'k') {
+    e.preventDefault();
+    qs('#btnHitung').click();
+  }
+
+  // Shift + S: Cetak struk
+  if (e.shiftKey && e.key.toLowerCase() === 's') {
+    e.preventDefault();
+    qs('#btnCetak').click();
+  }
+
+  // Shift + D: Bersihkan keranjang
+  if (e.shiftKey && e.key.toLowerCase() === 'd') {
+    e.preventDefault();
+    qs('#btnBersihkan').click();
+  }
+});
 </script>
 </body>
 </html>
